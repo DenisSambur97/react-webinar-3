@@ -1,6 +1,5 @@
 import React from 'react';
 import {createRoot} from 'react-dom/client';
-import {createElement} from './utils.js';
 import App from './app.js';
 import Store from './store.js';
 
@@ -15,6 +14,8 @@ const store = new Store({
     {code: 7, title: 'Седьмая запись'},
   ]
 });
+
+console.log(store)
 
 const root = createRoot(document.getElementById('root'));
 

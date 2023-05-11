@@ -1,5 +1,4 @@
 import React from 'react';
-import {createElement} from './utils.js';
 import './styles.css';
 
 /**
@@ -8,8 +7,18 @@ import './styles.css';
  * @returns {React.ReactElement}
  */
 function App({store}) {
-
   const list = store.getState().list;
+
+  // Ф-ция склонения слов
+  function pluralize(selectedCount) {
+      if (selectedCount === 1) {
+          return `Выделялось ${selectedCount} раз`;
+      } else if (selectedCount > 1 && selectedCount < 5) {
+          return `Выделялось ${selectedCount} раза`;
+      } else {
+          return `Выделялось ${selectedCount} раз`;
+      }
+  }
 
   return (
     <div className='App'>
@@ -26,7 +35,7 @@ function App({store}) {
               <div className={'Item' + (item.selected ? ' Item_selected' : '')}
                    onClick={() => store.selectItem(item.code)}>
                 <div className='Item-code'>{item.code}</div>
-                <div className='Item-title'>{item.title}</div>
+                <div className='Item-title'>{item.title} {item.selectedCount ? <span> | {pluralize(item.selectedCount)}</span> : ''}</div>
                 <div className='Item-actions'>
                   <button onClick={() => store.deleteItem(item.code)}>
                     Удалить
