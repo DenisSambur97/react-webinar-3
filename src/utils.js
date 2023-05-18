@@ -49,3 +49,7 @@ export const generateCode1 = (function (start = 0) {
 export function generateCode2() {
   return generateCode2.value ? ++generateCode2.value : generateCode2.value = 1;
 }
+// Форматирование сумм
+export function formatMoney(amount) {
+  return amount.toLocaleString('ru-RU') + ' ₽';
+}

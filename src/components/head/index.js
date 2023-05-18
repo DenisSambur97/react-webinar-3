@@ -12,6 +12,7 @@ function Head({title}){
 
 Head.propTypes = {
   title: PropTypes.node,
+  onOpenCart: PropTypes.func
 };
 
 export default React.memo(Head);
