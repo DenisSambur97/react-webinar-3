@@ -2,31 +2,32 @@ import React from "react";
 import PropTypes from 'prop-types';
 import './style.css';
 import {formatMoney} from "../../utils";
+import { cn as bem } from '@bem-react/classname';
 
 function Cart({cartItems, totalPrice, onRemove}){
-
+    const cn = bem('Cart');
     return (
-        <div className='Cart'>
+        <div className={cn()}>
             <h2>Корзина</h2>
             {cartItems.length > 0 ? (
                 <>
-                    <ul className='Cart-items'>
+                    <ul className={cn('items')}>
                         {cartItems.map(item => (
-                            <li key={item.code} className='Cart-item'>
-                                <span className="Cart-item-code">{item.code} </span>
-                                <p className='Cart-item-name'>{item.title}</p>
-                                <div className="Cart-item-info">
-                                    <p className='Cart-item-price'>{formatMoney(item.price)}</p>
-                                    <div className='Cart-item-selected'>{item.selectedCount} шт</div>
-                                    <button className='Cart-item-del' onClick={() => onRemove(item.code)}>Удалить</button>
+                            <li key={item.code} className={cn('item')}>
+                                <span className={cn('item-code')}>{item.code} </span>
+                                <p className={cn('item-name')}>{item.title}</p>
+                                <div className={cn('item-info')}>
+                                    <p className={cn('item-price')}>{formatMoney(item.price)}</p>
+                                    <div className={cn('item-selected')}>{item.selectedCount} шт</div>
+                                    <button className={cn('item-del')} onClick={() => onRemove(item.code)}>Удалить</button>
                                 </div>
                             </li>
                         ))}
                     </ul>
-                    <div className='Cart-total-price'><p>Итого</p> <span>{formatMoney(totalPrice)}</span></div>
+                    <div className={cn('total-price')}><p>Итого</p> <span>{formatMoney(totalPrice)}</span></div>
                 </>
             ) : (
-                <div className="Cart-empty">Корзина пуста</div>
+                <div className={cn('empty')}>Корзина пуста</div>
             )}
         </div>
     );

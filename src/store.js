@@ -5,8 +5,12 @@ import {generateCode} from "./utils";
  */
 class Store {
   constructor(initState = {}) {
-    this.state = initState;
+    // this.state = initState;
+    this.state = {...initState, cartVisible: false, cartItems: []};
     this.listeners = []; // Слушатели изменений состояния
+    // this.addItemToCart = this.addItemToCart.bind(this);
+    // this.removeItemFromCart = this.removeItemFromCart.bind(this);
+    // this.openCart = this.openCart.bind(this);
   }
 
   /**
@@ -83,6 +87,41 @@ class Store {
       })
     })
   }
+
+  /**
+   * Добавление товара в корзину
+   * @param item
+   */
+  addItemToCart(item) {
+    if (item && item.code) {
+      const existingItemIndex = this.state.cartItems.findIndex(existingItem => existingItem.code === item.code);
+      if (existingItemIndex !== -1) {
+        const existingItem = this.state.cartItems[existingItemIndex];
+        const updatedItem = {...existingItem, selectedCount: existingItem.selectedCount + 1};
+        this.setState({...this.state, cartItems: [...this.state.cartItems.slice(0, existingItemIndex), updatedItem, ...this.state.cartItems.slice(existingItemIndex + 1)]});
+      } else {
+        this.setState({...this.state, cartItems: [...this.state.cartItems, {...item, selectedCount: 1}]});
+      }
+      if (this.state.cartVisible) {
+        this.setState({...this.state, cartVisible: false});
+      }
+    }
+  };
+
+  /**
+   * Удаление товара из корзины по коду
+   * @param code
+   */
+  removeItemFromCart(code) {
+    this.setState({...this.state, cartItems: this.state.cartItems.filter(item => item.code !== code)});
+  };
+
+  /**
+   * Открытие корзины
+   */
+  openCart() {
+    this.setState({...this.state, cartVisible: true});
+  };
 }
 
 export default Store;

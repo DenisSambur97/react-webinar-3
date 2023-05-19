@@ -12,7 +12,7 @@ function Controls({onOpenCart, cartItems, cartTotalPrice}){
           {cartTotalPrice > 0 ? `/ ${formatMoney(cartTotalPrice)}` : ''}
       </p>
       {/*Добавил ин-лайн стиль. Не захотелось из-за одного свойства добавлять класс, могу переделать :)*/}
-      <button onClick={onOpenCart} style={{width: '74px'}}>Перейти</button>
+      <button onClick={onOpenCart} style={{width: '82px'}}>Перейти</button>
     </div>
   )
 }

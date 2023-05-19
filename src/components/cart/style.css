@@ -12,6 +12,11 @@ ul{
     line-height: 37px;
 }
 
+.Cart-items {
+    height: 100%;
+    overflow-y: auto;
+}
+
 .Cart-item{
     position: relative;
     display: flex;
@@ -19,7 +24,7 @@ ul{
     align-items: center;
     transition: background-color 1s;
     list-style-type: none;
-    padding: 20px 18px;
+    padding: 18px;
     max-height: 25px;
     border-bottom: 1px dashed #ccc;
 }
@@ -29,7 +34,7 @@ ul{
 }
 
 .Cart-item-code {
-    margin-right: 20px;
+    margin-right: 22px;
     font-size: 16px;
     line-height: 18px;
 }
@@ -51,14 +56,15 @@ ul{
     margin-right: 62px;
     font-size: 18px;
     line-height: 21px;
+    color: #404040;
 }
 
 .Cart-item-selected{
     margin-right: 24px;
     font-size: 18px;
     line-height: 21px;
+    color: #404040;
 }
-
 
 .Cart-item-del{
     width: 76px;
@@ -68,13 +74,12 @@ ul{
 .Cart-total-price{
     display: flex;
     align-items: center;
-    position: absolute;
-    right: 120px;
+    justify-content: flex-end;
     margin-top: -10px;
     font-weight: 700;
     font-size: 18px;
     line-height: 21px;
-
+    margin-right: 120px;
 }
 
 .Cart-total-price p{

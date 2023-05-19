@@ -3,8 +3,7 @@ import List from "./components/list";
 import Controls from "./components/controls";
 import Head from "./components/head";
 import PageLayout from "./components/page-layout";
-import Cart from "./components/cart";
-import 'app.css'
+import Modal from "./components/modal";
 
 /**
  * Приложение
@@ -18,40 +17,36 @@ function App({store}) {
 
   const list = store.getState().list;
 
+  store.subscribe(() => {
+    setCartItems(store.getState().cartItems);
+    setCartVisible(store.getState().cartVisible);
+  });
+
   const callbacks = {
-    onDeleteItem: useCallback((code) => {
-      store.deleteItem(code);
-    }, [store]),
-
-    onSelectItem: useCallback((code) => {
-      store.selectItem(code);
-    }, [store]),
-
-    onAddItem: useCallback(() => {
-      store.addItem();
-    }, [store]),
+    // onDeleteItem: useCallback((code) => {
+    //   store.deleteItem(code);
+    // }, [store]),
+    //
+    // onSelectItem: useCallback((code) => {
+    //   store.selectItem(code);
+    // }, [store]),
+    //
+    // onAddItem: useCallback(() => {
+    //   store.addItem();
+    // }, [store]),
 
     addItemToCart: useCallback((item) => {
-      if (item && item.code) {
-        // Изменяем количество выбранных единиц товара
-        const existingItemIndex = cartItems.findIndex(existingItem => existingItem.code === item.code);
-        if (existingItemIndex !== -1) {
-          const existingItem = cartItems[existingItemIndex];
-          const updatedItem = {...existingItem, selectedCount: existingItem.selectedCount + 1};
-          setCartItems([...cartItems.slice(0, existingItemIndex), updatedItem, ...cartItems.slice(existingItemIndex + 1)]);
-        } else {
-          setCartItems([...cartItems, {...item, selectedCount: 1}]);
-        }
-      }
-    }, [cartItems]),
+      store.addItemToCart(item);
+    }, [store]),
 
     removeItemFromCart: useCallback((code) => {
-      setCartItems(cartItems.filter(item => item.code !== code));
-    }, [cartItems]),
+      store.removeItemFromCart(code);
+
+    }, [store]),
 
     openCart: useCallback(() => {
-      setCartVisible(true);
-    }, [])
+      store.openCart();
+    }, [store])
   }
 
   const cartTotalPrice = cartItems.reduce((total, item) => total + item.price * item.selectedCount, 0);
@@ -82,17 +77,23 @@ function App({store}) {
   return (
     <PageLayout>
       <Head title='Магазин'/>
-      <Controls onAdd={callbacks.onAddItem} onOpenCart={callbacks.openCart} cartItems={cartItems} cartTotalPrice={cartTotalPrice}/>
-      <List list={store.getState().list} onDeleteItem={callbacks.onDeleteItem}
-            onSelectItem={callbacks.onSelectItem} onAddToCart={callbacks.addItemToCart}/>
+      <Controls
+          // onAdd={callbacks.onAddItem}
+          onOpenCart={callbacks.openCart}
+          cartItems={cartItems}
+          cartTotalPrice={cartTotalPrice}/>
+      <List
+            list={store.getState().list}
+            onDeleteItem={callbacks.onDeleteItem}
+            onSelectItem={callbacks.onSelectItem}
+            onAddToCart={callbacks.addItemToCart}/>
       {cartVisible && (
-          <div className='Cart-modal'>
-            <div className='Cart-modal-overlay' ref={modalEl}/>
-            <div className='Cart-modal-content'>
-              <button className='Cart-close-button' onClick={() => setCartVisible(false)}>Закрыть</button>
-              <Cart cartItems={cartItems} totalPrice={cartTotalPrice} onRemove={callbacks.removeItemFromCart}/>
-            </div>
-          </div>
+          <Modal
+              cartItems={cartItems}
+              cartTotalPrice={cartTotalPrice}
+              onRemove={callbacks.removeItemFromCart}
+              setCartVisible={setCartVisible}
+              modalEl={modalEl}/>
       )}
     </PageLayout>
   );
