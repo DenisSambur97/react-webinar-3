@@ -4,12 +4,13 @@ import './style.css';
 import {formatMoney, plural} from "../../utils";
 
 function Controls({onOpenCart, cartItems, cartTotalPrice}){
+  const hasItems = cartItems.length > 0;
   return (
     <div className='Controls'>
       <p className={'Controls-title'}>В корзине:</p>
       <p className={'Controls-products'}>
           {cartItems.length > 0 ? `${cartItems.length} ${plural(cartItems.length, {one: 'товар', few: 'товара', many: 'товаров'})} ` : 'пусто'}
-          {cartTotalPrice > 0 ? `/ ${formatMoney(cartTotalPrice)}` : ''}
+          {hasItems && cartTotalPrice !== null && cartTotalPrice >= 0 && ` / ${formatMoney(cartTotalPrice)}`}
       </p>
       {/*Добавил ин-лайн стиль. Не захотелось из-за одного свойства добавлять класс, могу переделать :)*/}
       <button onClick={onOpenCart} style={{width: '82px'}}>Перейти</button>
