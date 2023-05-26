@@ -19,13 +19,15 @@ function Basket() {
   const callbacks = {
     // Удаление из корзины
     removeFromBasket: useCallback(_id => store.actions.basket.removeFromBasket(_id), [store]),
+    // Добавление в корзину
+    addToBasket: useCallback(item => store.actions.basket.addToBasket(item), [store]),
     // Закрытие любой модалки
     closeModal: useCallback(() => store.actions.modals.close(), [store]),
   }
 
   const renders = {
     itemBasket: useCallback((item) => {
-      return <ItemBasket item={item} onRemove={callbacks.removeFromBasket}/>
+      return <ItemBasket item={item} onRemove={callbacks.removeFromBasket} onClose={callbacks.closeModal}/>
     }, [callbacks.removeFromBasket]),
   };
 

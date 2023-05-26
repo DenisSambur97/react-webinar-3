@@ -1,0 +1,48 @@
+.Article{
+    background-color: white;
+    min-height: 100vh;
+    max-width: 1024px;
+    margin: 0 auto;
+}
+
+.Article-info{
+    height: 100%;
+    padding: 0 40px 0;
+    color: #000000;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 21px;
+}
+
+.Article-info-country span{
+    font-weight: 700;
+}
+
+.Article-info-category span{
+    font-weight: 700;
+}
+
+.Article-info-year span{
+    font-weight: 700;
+}
+
+.Article-info-price{
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 28px;
+}
+
+.Article-btn{
+    width: 76px;
+    height: 21px;
+    margin-left: 40px;
+    border-radius: 2px;
+    background-color: #EFEFEF;
+    border: 1px solid #767676;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 15px;
+    text-align: center;
+    color: #000000;
+
+}
