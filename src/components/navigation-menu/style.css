@@ -1,0 +1,20 @@
+.NavigationMenu{
+  position: absolute;
+  z-index: 20;
+  color: #0087E9;
+}
+
+.NavigationMenu ul{
+  list-style-type: none;
+  padding-top: 2px;
+  padding-left: 20px;
+}
+
+.NavigationMenu-link{
+  color: #0087E9!important;
+  text-decoration: underline;
+  justify-content: start;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21px;
+}

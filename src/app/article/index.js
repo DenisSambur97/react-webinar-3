@@ -1,19 +1,18 @@
-import {memo, useEffect, useState} from 'react';
-import 'style.css'
+import {memo, useCallback, useEffect, useState} from 'react';
 import Head from "../../components/head";
 import BasketTool from "../../components/basket-tool";
 import useStore from "../../store/use-store";
 import {useParams} from "react-router-dom";
 import useSelector from "../../store/use-selector";
 import {cn as bem} from "@bem-react/classname";
+import Product from "../../components/product";
+import ProductLayout from "../../components/product-layout";
+import NavigationMenu from "../../components/navigation-menu";
 
 function Article() {
     const store = useStore();
     const [article, setArticle] = useState({});
     const { id } = useParams();
-
-    // Добавляем useSelector из библиотеки react-redux
-    const currentPage = useSelector((state) => state.catalog.page);
 
     const cn = bem('Article');
 
@@ -31,14 +30,19 @@ function Article() {
         fetchArticle();
     }, [id]);
 
+    useEffect(() => {
+        if (!store.getState().catalog.list.length) {
+            store.actions.catalog.load();
+        }
+    }, []);
+
     const callbacks = {
         // Добавление в корзину
         addToBasket: () => {
-            store.actions.basket.addToBasket(article._id)
-        },
-        // Удаление из корзины
-        removeFromBasket: () => {
-            store.actions.basket.removeFromBasket(article._id)
+            if (article && article.price) {
+                store.actions.basket.addToBasket(article._id)
+                console.log(article._id)
+            }
         },
         // Открытие модалки корзины
         openModalBasket: () => {
@@ -47,19 +51,15 @@ function Article() {
     }
 
     return (
-        <div className={cn()}>
+        <ProductLayout>
             <Head title={article.title}/>
-            <BasketTool onOpen={callbacks.openModalBasket} amount={select.amount} sum={select.sum}>
-            </BasketTool>
-            <div className={cn('info')}>
-                <p>{article.description}</p>
-                <p className={cn('info-country')}>Страна производитель: <span>{article.madeIn?.title}</span></p>
-                <p className={cn('info-category')}>Категория: <span>{article.category?.title}</span></p>
-                <p className={cn('info-year')}>Год выпуска: <span>{article.edition}</span></p>
-                <p className={cn('info-price')}>Цена: {article.price} ₽</p>
-            </div>
-            <button className={cn('btn')} onClick={callbacks.addToBasket}>Добавить</button>
-        </div>
+            <NavigationMenu/>
+            <BasketTool onOpen={callbacks.openModalBasket} amount={select.amount} sum={select.sum}/>
+            {/*<Product article={article} addToBasket={callbacks.addToBasket}/>*/}
+            {article._id &&
+                <Product article={article} addToBasket={callbacks.addToBasket}/>
+            }
+        </ProductLayout>
     );
 }
 
