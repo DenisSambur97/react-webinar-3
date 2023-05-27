@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Item from "../item";
 import './style.css';
 
-function List({list, renderItem, setPageData, onClose}){
+function List({list, renderItem, setPageData, language}){
   useEffect(() => {
     if (typeof setPageData === 'function') {
       setPageData(list);
@@ -14,7 +14,7 @@ function List({list, renderItem, setPageData, onClose}){
     <div className='List'>{
       list.map(item =>
         <div key={item._id} className='List-item'>
-          {renderItem(item)}
+          {renderItem({...item, language: language})}
         </div>
       )}
     </div>

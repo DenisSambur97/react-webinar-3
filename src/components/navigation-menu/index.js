@@ -2,8 +2,9 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import {cn as bem} from "@bem-react/classname";
 import "style.css"
+import lang from "../../store/languages";
 
-function NavigationMenu() {
+function NavigationMenu({language}) {
 
     const cn = bem('NavigationMenu');
 
@@ -12,7 +13,7 @@ function NavigationMenu() {
             <ul>
                 <li>
                     <Link to='/' className={cn('link')} >
-                        Главная
+                        {lang[language].home}
                     </Link>
                 </li>
             </ul>

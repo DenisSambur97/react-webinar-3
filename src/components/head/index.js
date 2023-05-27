@@ -1,11 +1,12 @@
 import {memo} from "react";
 import PropTypes from "prop-types";
 import './style.css';
+import lang from "../../store/languages";
 
-function Head({title}){
+function Head({title, language, article}){
   return (
     <div className='Head'>
-      <h1>{title}</h1>
+        <h1>{article ? title : lang[language].pageTitle}</h1>
     </div>
   )
 }

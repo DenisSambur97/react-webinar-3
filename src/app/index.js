@@ -3,6 +3,7 @@ import Main from "./main";
 import Basket from "./basket";
 import useSelector from "../store/use-selector";
 import Article from "./article";
+import {useState} from "react";
 
 /**
  * Приложение
@@ -10,16 +11,17 @@ import Article from "./article";
  */
 function App() {
 
+  const [language, setLanguage] = useState('ru');
   const activeModal = useSelector(state => state.modals.name);
 
   return (
     <>
         <BrowserRouter>
             <Routes>
-                <Route path='/' element={<Main />} />
-                <Route path='article/:id' element={<Article />} />
+                <Route path='/' element={<Main language={language} setLanguage={setLanguage}/>} />
+                <Route path='article/:id' element={<Article language={language}/>} />
             </Routes>
-            {activeModal === 'basket' && <Basket />}
+            {activeModal === 'basket' && <Basket language={language}/>}
         </BrowserRouter>
     </>
   );

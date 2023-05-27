@@ -11,10 +11,9 @@ import LanguageBtn from "../../components/language-btn";
 import lang from "../../store/languages"
 import NavigationMenu from "../../components/navigation-menu";
 
-function Main() {
+function Main({language, setLanguage}) {
   const store = useStore();
   const [currentPage, setCurrentPage] = useState(1);
-  // const [language, setLanguage] = useState('ru');
 
   useEffect(() => {
     store.actions.catalog.load();
@@ -25,7 +24,7 @@ function Main() {
     amount: state.basket.amount,
     sum: state.basket.sum,
     totalPages: state.catalog.count,
-    currentPage: state.catalog.currentPage // New State from Store
+    currentPage: state.catalog.currentPage
   }));
 
   const callbacks = {
@@ -38,43 +37,46 @@ function Main() {
       setCurrentPage(page);
       store.actions.catalog.load({ page });
     }, [store]),
-    // changeLanguage: useCallback(() => {
-    //   setLanguage (language === 'ru' ? 'en' : 'ru');
-    // }, [language])
   }
-
-  // const handleLanguageChange = () => {
-  //   setLanguage(language === 'ru' ? 'en' : 'ru');
-  // };
 
   const renders = {
     item: useCallback((item) => {
       return (
-          <Item item={item} onAdd={callbacks.addToBasket} url={`/article/${item._id}`} />
+          <Item item={item} language={language} onAdd={callbacks.addToBasket} url={`/article/${item._id}`} />
       )
-    }, [callbacks.addToBasket]),
+    }, [callbacks.addToBasket, language]),
   };
 
   return (
     <PageLayout>
       <Head
           title='Магазин'
+          language={language}
       />
-      <NavigationMenu/>
+      <LanguageBtn
+        language={language}
+        onLanguageChange={setLanguage}
+      />
+      <NavigationMenu
+          language={language}
+      />
       <BasketTool
           onOpen={callbacks.openModalBasket}
           amount={select.amount}
           sum={select.sum}
           currentPage={currentPage}
           onPageChange={callbacks.changePage}
+          language={language}
       />
       <List
           list={select.list}
           renderItem={renders.item}
+          language={language}
       />
       <Pagination
           onPageChange={callbacks.changePage}
           totalPages={select.totalPages}
+          language={language}
       />
     </PageLayout>
 

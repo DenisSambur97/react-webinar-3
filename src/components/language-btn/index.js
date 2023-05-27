@@ -2,14 +2,21 @@ import {memo} from "react";
 import PropTypes from "prop-types";
 import './style.css';
 
-function LanguageBtn({language}){
+function LanguageBtn({language, onLanguageChange}){
+  const handleClick = () => {
+    const newLanguage = (language === 'ru') ? 'en' : 'ru';
+    onLanguageChange(newLanguage);
+  };
+
   return (
-      <p>{language}</p>
+      <button onClick={handleClick} className="btn">
+        {language === 'ru' ? 'English' : 'Русский'}
+      </button>
   )
 }
 
 LanguageBtn.propTypes = {
-  title: PropTypes.node,
+  language: PropTypes.string,
 };
 
 export default memo(LanguageBtn);

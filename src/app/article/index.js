@@ -9,7 +9,7 @@ import Product from "../../components/product";
 import ProductLayout from "../../components/product-layout";
 import NavigationMenu from "../../components/navigation-menu";
 
-function Article() {
+function Article({language}) {
     const store = useStore();
     const [article, setArticle] = useState({});
     const { id } = useParams();
@@ -52,12 +52,11 @@ function Article() {
 
     return (
         <ProductLayout>
-            <Head title={article.title}/>
-            <NavigationMenu/>
-            <BasketTool onOpen={callbacks.openModalBasket} amount={select.amount} sum={select.sum}/>
-            {/*<Product article={article} addToBasket={callbacks.addToBasket}/>*/}
+            <Head title={article.title} article={article}/>
+            <NavigationMenu language={language}/>
+            <BasketTool onOpen={callbacks.openModalBasket} amount={select.amount} sum={select.sum} language={language}/>
             {article._id &&
-                <Product article={article} addToBasket={callbacks.addToBasket}/>
+                <Product article={article} addToBasket={callbacks.addToBasket} language={language}/>
             }
         </ProductLayout>
     );
