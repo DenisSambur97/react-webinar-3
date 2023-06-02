@@ -11,6 +11,7 @@
   "basket.delete": "Delete",
   "article.add": "Add",
   "filter.reset": "Reset",
+  "category.all": "All",
   "basket.articles": {
     "one": "article",
     "other": "articles"

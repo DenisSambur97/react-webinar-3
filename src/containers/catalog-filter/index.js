@@ -5,6 +5,7 @@ import useSelector from "../../hooks/use-selector";
 import Select from "../../components/select";
 import Input from "../../components/input";
 import SideLayout from "../../components/side-layout";
+import CategoryFilter from "../../components/category-filter";
 
 function CatalogFilter() {
 
@@ -37,6 +38,7 @@ function CatalogFilter() {
 
   return (
     <SideLayout padding='medium'>
+      <CategoryFilter/>
       <Select options={options.sort} value={select.sort} onChange={callbacks.onSort}/>
       <Input value={select.query} onChange={callbacks.onSearch} placeholder={'Поиск'}
              delay={1000}/>

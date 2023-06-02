@@ -11,6 +11,7 @@
   "basket.delete": "Удалить",
   "article.add": "Добавить",
   "filter.reset": "Сбросить",
+  "category.all": "Все",
   "basket.articles": {
     "one": "товар",
     "few": "товара",

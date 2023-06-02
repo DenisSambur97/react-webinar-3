@@ -1,0 +1,11 @@
+.UserBar{
+  width: 100%;
+  height: 40px;
+  background-color: white;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.UserBar a{
+  margin: 10px 23px;
+}
