@@ -2,16 +2,20 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import useStore from "../../hooks/use-store";
 import useSelector from "../../hooks/use-selector";
+import {cn as bem} from '@bem-react/classname';
+import 'style.css'
+import useTranslate from "../../hooks/use-translate";
 
 function Profile() {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
     const store = useStore();
+    const {t} = useTranslate();
+
+    const cn = bem('Profile');
 
     const select = useSelector(state => ({
         data: state.auth.data,
-        login: state.auth.login,
-        password: state.auth.password,
         isLogged: state.auth.isLogged,
         waiting: state.auth.waiting
     }));
@@ -29,27 +33,6 @@ function Profile() {
         fetchData();
     }, []);
 
-    // useEffect(() => {
-    //     const token = localStorage.getItem('token');
-    //     const fetchData = async () => {
-    //         try {
-    //             const response = await fetch('/api/v1/users/self', {
-    //                 headers: { 'X-Token': token }
-    //             });
-    //             if (!response.ok) {
-    //                 throw new Error('Invalid token');
-    //             }
-    //             const data = await response.json();
-    //             setUser(data);
-    //         } catch (error) {
-    //             console.error(error);
-    //             // Если произошла ошибка, перенаправляем пользователя на страницу логина
-    //             navigate('/login');
-    //         }
-    //     };
-    //     fetchData();
-    // }, []);
-
     if (!user) {
         return <div>Loading...</div>;
     }
@@ -57,12 +40,13 @@ function Profile() {
     return (
         <>
             {!user ? (
-                <div>Loading...</div>
+                <div className={cn()}>Loading...</div>
             ) : (
-                <div>
-                    <h2>{user.username}</h2>
-                    <p>{user.email}</p>
-                    {/*<p>{user.profile.phone}</p>*/}
+                <div className={cn()}>
+                    <h3>{t('profile')}</h3>
+                    <p><span>{t('profile.name')}: </span>{select.data.profile.name}</p>
+                    <p><span>{t('profile.phone')}: </span>{select.data.email}</p>
+                    <p><span>email: </span>{select.data.profile.phone}</p>
                 </div>
             )}
         </>

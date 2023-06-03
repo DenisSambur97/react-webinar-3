@@ -14,23 +14,27 @@ function ProfilePage() {
 
     const select = useSelector(state => ({
         data: state.auth.data,
+        login: state.auth.login,
+        password: state.auth.password,
+        isLogged: state.auth.isLogged,
     }));
 
     const {t} = useTranslate();
 
     const callbacks = {
-        onLoad: useCallback(() => store.actions.auth.load(), [store])
+        onLoad: useCallback(() => store.actions.auth.load(), [store]),
+        onLogout: useCallback(() => store.actions.auth.logout(), [store])
+
     }
 
   return (
     <PageLayout>
-      <UserBar/>
-      <Head title={select.article.title}>
+      <UserBar login={select.login} isLogged={select.isLogged} onLogout={callbacks.onLogout} name={select.data.profile}/>
+      <Head title={t('title')}>
         <LocaleSelect/>
       </Head>
       <Navigation/>
       <Profile onLoad={callbacks.onLoad} data={select.data}
-
       />
     </PageLayout>
   );

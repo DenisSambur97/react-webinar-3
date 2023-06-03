@@ -3,31 +3,19 @@ import { Link } from 'react-router-dom';
 import {cn as bem} from '@bem-react/classname';
 import 'style.css'
 
-function UserBar() {
-  const [authenticated, setAuthenticated] = useState(false);
-  const [username, setUsername] = useState(''); // по умолчанию нет авторизации
+function UserBar({login, data, isLogged, onLogout, name}) {
 
   const cn = bem('UserBar');
 
   const handleLogout = async () => {
-    await fetch('/api/users/sign', {
-      method: 'DELETE',
-      headers: {
-        'X-Token': localStorage.getItem('token')
-      }
-    });
-
-    localStorage.removeItem('token');
-    setAuthenticated(false);
-    setUsername('');
+    await onLogout();
   };
 
   return (
       <div className={cn()}>
-        {authenticated ? (
+        {isLogged ? (
             <>
-              <Link to="/profile">{username}</Link>
-              <button onClick={handleLogout}>Выход</button>
+              <Link to="/profile">{name.name} <button onClick={handleLogout}>Выход</button></Link>
             </>
         ) : (
             <Link to="/login"><button>Вход</button></Link>

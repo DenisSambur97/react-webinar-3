@@ -9,3 +9,7 @@
 .UserBar a{
   margin: 10px 23px;
 }
+
+.UserBar a button{
+  margin-left: 20px;
+}

@@ -1,12 +1,36 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import useStore from "../../hooks/use-store";
+import {cn as bem} from '@bem-react/classname';
+import './style.css'
+import useTranslate from "../../hooks/use-translate";
 
-function AuthUser({login, onLogin}) {
+function AuthUser({onLogin}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
 
+    const store = useStore()
     const history = useNavigate()
+    const {t} = useTranslate();
+
+    const cn = bem('AuthUser');
+
+    const handleUsernameChange = (event) => {
+        setUsername(event.target.value);
+    };
+
+    const handlePasswordChange = (event) => {
+        setPassword(event.target.value);
+    };
+
+    const handleUsernameBlur = () => {
+        store.actions.auth.setState({login: username});
+    }
+
+    const handlePasswordBlur = () => {
+        store.actions.auth.setState({password: password});
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -17,40 +41,24 @@ function AuthUser({login, onLogin}) {
         }
 
         try {
-            await onLogin(login, password);
+            await onLogin(username, password);
             history('/profile')
         } catch (error) {
             setError(error.message);
+            store.actions.auth.setState({error: error.message}) // ADD
         }
-
-        // try {
-        //     const response = await fetch('/api/v1/users/sign', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({ login: username, password })
-        //     });
-        //
-        //     if (!response.ok) {
-        //         throw new Error('Invalid credentials');
-        //     }
-        //
-        //     const { result } = await response.json();
-        //     localStorage.setItem('token', result.token); // Сохраняем токен в локальном хранилище
-        //     history('/profile')
-        // } catch (error) {
-        //     setError(error.message);
-        // }
     };
 
     return (
-        <form className="auth-user" onSubmit={handleSubmit}>
-            <input type="text" value={username} onChange={(event) => setUsername(event.target.value)} />
-            <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
-            <button type="submit">Войти</button>
-            {error && <span>{error}</span>}
-        </form>
+            <form className={cn()} onSubmit={handleSubmit}>
+                <h3>{t('auth.entry')}</h3>
+                <label htmlFor="login">{t('auth.login')}</label>
+                <input type="text" value={username} name="login" onChange={handleUsernameChange} onBlur={handleUsernameBlur} />
+                <label htmlFor="password">{t('auth.password')}</label>
+                <input type="password" value={password} name="password" onChange={handlePasswordChange} onBlur={handlePasswordBlur} />
+                {error && <span>{error}</span>}
+                <button type="submit">{t('auth.signin')}</button>
+            </form>
     );
 }
 

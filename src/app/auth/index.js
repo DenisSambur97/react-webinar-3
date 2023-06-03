@@ -8,6 +8,7 @@ import Head from "../../components/head";
 import Navigation from "../../containers/navigation";
 import LocaleSelect from "../../containers/locale-select";
 import AuthUser from "../../components/auth-user";
+import UserBar from "../../components/user-bar";
 
 function Auth() {
   const store = useStore();
@@ -16,16 +17,20 @@ function Auth() {
 
   const select = useSelector(state => ({
     login: state.auth.login,
-    password: state.auth.password
+    password: state.auth.password,
+    isLogged: state.auth.isLogged,
+    error: state.auth.error
   }));
 
   const callbacks = {
     // Вход в профайл
       onLogin: useCallback((login, password) => store.actions.auth.sign(login,password), [store]),
+      onLogout: useCallback(() => store.actions.auth.logout(), [store])
   }
 
   return (
     <PageLayout>
+      <UserBar login={select.login} isLogged={select.isLogged} onLogout={callbacks.onLogout}/>
       <Head title={t('title')}>
         <LocaleSelect/>
       </Head>
@@ -35,6 +40,7 @@ function Auth() {
           password={select.password}
           onLogin={callbacks.onLogin}
           isLogged={select.isLogged}
+          error={select.error}
       />
     </PageLayout>
   );

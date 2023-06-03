@@ -9,7 +9,6 @@ class AuthState extends StoreModule {
       data: {},
       login: '',
       password: '',
-      waiting: false, // признак ожидания загрузки
       isLogged: false,
       error: ''
     }
@@ -37,7 +36,6 @@ class AuthState extends StoreModule {
       this.setState({
         ...this.getState(),
         data: json.result,
-        waiting: false,
         login: json.result.username,
         password: json.result.password,
         isLogged: true
@@ -47,7 +45,6 @@ class AuthState extends StoreModule {
       // Ошибка при загрузке
       this.setState({
         data: {},
-        waiting: false,
         error: e.message
       });
     }
@@ -57,42 +54,45 @@ class AuthState extends StoreModule {
    * @return {Promise<void>}
    */
   async sign(login, password) {
-    // Сброс текущих значений
     this.setState({
-      ...this.getState(),
-      waiting: true
+      ...this.getState()
     });
 
     try {
       const response = await fetch('/api/v1/users/sign', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ login, password })
+        body: JSON.stringify({ login, password }),
       });
-      const json = await response.json();
-      const { token, user } = await response.json();
-      localStorage.setItem('token', token); // Сохраняем токен в локальном хранилище
-      window.location.replace("/");
-
-      // Загружен успешно
+      const data = await response.json();
+      console.log(data.result)
+      if (data.result.token && data.result.user) {
+        localStorage.setItem('token', data.result.token);
+        this.setState({
+          ...this.getState(),
+          data: data.user,
+          isLogged: true,
+          error: '',
+          login: data.user.username,
+          password: data.user.password,
+        });
+      } else {
+         // throw new Error('Некорректный ответ от сервера');
+        this.setState({
+          ...this.getState(),
+          data: {},
+          isLogged: false,
+          error: ''
+        });
+      }
+    } catch (e) {
       this.setState({
         ...this.getState(),
-        data: user,
-        waiting: false,
-        login: json.result.username,
-        password: json.result.password,
-        isLogged: true
-      }, 'Загружен пользователь из АПИ');
-
-    } catch (e) {
-      // Ошибка при загрузке
-      this.setState({
         data: {},
         isLogged: false,
         error: e.message,
-        waiting: false
       });
     }
   }
@@ -110,7 +110,12 @@ class AuthState extends StoreModule {
           }
         });
       localStorage.removeItem('token');
-      window.location.replace('/');
+      window.location.replace('/login');
+      this.setState({
+        ...this.getState(),
+        data: {},
+        isLogged: false
+      }, 'Пользователя не залогировался');
     } catch (error) {
       this.setState({
         ...this.getState(),
